@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/Pomodoro/static/css/main.b98b96d6.chunk.css",
+    "main.js": "/Pomodoro/static/js/main.6a9a34bd.chunk.js",
+    "main.js.map": "/Pomodoro/static/js/main.6a9a34bd.chunk.js.map",
+    "runtime~main.js": "/Pomodoro/static/js/runtime~main.9df9e57d.js",
+    "runtime~main.js.map": "/Pomodoro/static/js/runtime~main.9df9e57d.js.map",
+    "static/css/2.22a7d4ef.chunk.css": "/Pomodoro/static/css/2.22a7d4ef.chunk.css",
+    "static/js/2.311e5441.chunk.js": "/Pomodoro/static/js/2.311e5441.chunk.js",
+    "static/js/2.311e5441.chunk.js.map": "/Pomodoro/static/js/2.311e5441.chunk.js.map",
+    "index.html": "/Pomodoro/index.html",
+    "precache-manifest.b16126f9aee6cf2b4f69f0e9ff6ed778.js": "/Pomodoro/precache-manifest.b16126f9aee6cf2b4f69f0e9ff6ed778.js",
+    "service-worker.js": "/Pomodoro/service-worker.js",
+    "static/css/2.22a7d4ef.chunk.css.map": "/Pomodoro/static/css/2.22a7d4ef.chunk.css.map",
+    "static/css/main.b98b96d6.chunk.css.map": "/Pomodoro/static/css/main.b98b96d6.chunk.css.map"
+  }
+}
