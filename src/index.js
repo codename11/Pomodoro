@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import './style.scss';
 
-var timer;
-
 class Pomodoro  extends React.Component {
 
     constructor(props) {
@@ -34,7 +32,7 @@ class Pomodoro  extends React.Component {
 
     timer(){
         
-        timer = setInterval(() => {
+        setInterval(() => {
 
             this.setState({
                 time: ""+(this.state.time-this.state.base),
@@ -47,7 +45,7 @@ class Pomodoro  extends React.Component {
     }
 
     reset(){
-        clearInterval(timer);
+        clearInterval(this.timer);
         this.setState({
             breakLength: 5,
             multiplier: 25,
