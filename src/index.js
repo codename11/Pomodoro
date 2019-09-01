@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import './style.scss';
 
+let clearTimer;
+
 class Pomodoro  extends React.Component {
 
     constructor(props) {
@@ -32,21 +34,22 @@ class Pomodoro  extends React.Component {
     }
 
     timer(){
-        
-        setInterval(() => {
 
-            this.setState({
-                time: ""+(this.state.time-this.state.base),
-                minutes: Math.floor(((this.state.time-this.state.base)/(this.state.base))/60),
-                seconds: this.state.seconds > 0 ? this.state.seconds-1 : 59,
-            });
+        if(this.state.minutes!==0 && this.state.seconds!==0){
+            clearTimer = setInterval(() => {
 
-        }, this.state.base);
+                this.setState({
+                    time: ""+(this.state.time-this.state.base),
+                    minutes: this.state.minutes > 0 ? Math.floor(((this.state.time-this.state.base)/(this.state.base))/60) : this.state.minutes,
+                    seconds: this.state.seconds > 0 ? this.state.seconds-1 : 59,
+                });
 
+            }, this.state.base);
+        }
     }
 
     reset(){
-        clearInterval(this.timer);
+        clearInterval(clearTimer);
         this.setState({
             breakLength: 5,
             multiplier: 25,
@@ -78,8 +81,6 @@ class Pomodoro  extends React.Component {
 
         }
 
-        
-
     }
 
     decrement(e){
@@ -97,7 +98,9 @@ class Pomodoro  extends React.Component {
         else if(myId==="multiplier-decrement"){
 
             this.setState({
-                multiplier: this.state.multiplier > 0 ? this.state.multiplier-1 : this.state.multiplier,
+                multiplier: this.state.multiplier > 1 ? this.state.multiplier-1 : this.state.multiplier,
+                time: this.state.time > 1 ? (""+((this.state.multiplier-1)*this.state.base*60)) : this.state.time,
+                minutes: this.state.minutes > 1 ? this.state.multiplier-1: this.state.minutes,
             });
 
         }
@@ -106,10 +109,14 @@ class Pomodoro  extends React.Component {
 
     render(){
         console.log(this.state);
+
+        if(this.state.minutes===0 && this.state.seconds===0){
+            clearInterval(clearTimer);
+        }
+
         let minutes = (""+this.state.minutes).length===0 ? "0"+this.state.minutes : this.state.minutes;
         let seconds = this.state.seconds===60 ? "00" : ((""+this.state.seconds).length===1 ? "0"+this.state.seconds : this.state.seconds);
-        
-        //console.log(this.state.minutes);
+
         return(
             <div className="grid-container cent">
                 <h1 className="item1">Pomodoro Clock</h1>
