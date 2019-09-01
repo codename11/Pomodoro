@@ -21,6 +21,8 @@ $wsmoke: whitesmoke;
 $txtAlign: center;
 $cursor: pointer;
 $d7: "digital", sans-serif;
+$f1: 2em;
+$m1: 10px;
 
 body{
     font-family: $d7;
@@ -57,10 +59,10 @@ body{
 }
 
 .nums{
-    font-size: 2em;
+    font-size: $f1;
     font-weight: bold;
     display: inline-block;
-    margin: 5px;
+    margin: $m1;
 }
 
 .arrow{
@@ -76,10 +78,14 @@ body{
     grid-column: 2 / 4;
     border: 0.1em solid white;
     border-radius: 0.5em;
-    font-size: 2em;
+    font-size: $f1;
 }
 
 .controls{
-    margin: 5px;
-    font-size: 1.5em;
+    margin: $m1;
+    font-size: $f1;
+}
+
+.fa.fa-arrow-down.fa-2x:hover, .fa.fa-arrow-up.fa-2x:hover{
+    color: silver;
 }

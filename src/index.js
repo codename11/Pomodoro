@@ -22,6 +22,7 @@ class Pomodoro  extends React.Component {
     }
 
     componentDidMount(){
+        
         this.setState({
             time: ""+(this.state.multiplier*this.state.base*60),
             minutes: this.state.multiplier,
@@ -71,6 +72,8 @@ class Pomodoro  extends React.Component {
 
             this.setState({
                 multiplier: this.state.multiplier+1,
+                time: ""+((this.state.multiplier+1)*this.state.base*60),
+                minutes: this.state.multiplier+1,
             });
 
         }
@@ -105,7 +108,8 @@ class Pomodoro  extends React.Component {
         console.log(this.state);
         let minutes = (""+this.state.minutes).length===0 ? "0"+this.state.minutes : this.state.minutes;
         let seconds = this.state.seconds===60 ? "00" : ((""+this.state.seconds).length===1 ? "0"+this.state.seconds : this.state.seconds);
-
+        
+        //console.log(this.state.minutes);
         return(
             <div className="grid-container cent">
                 <h1 className="item1">Pomodoro Clock</h1>
