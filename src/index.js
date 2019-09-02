@@ -16,11 +16,16 @@ class Pomodoro  extends React.Component {
             time: 0,
             minutes: 25,
             seconds: 60,
+            paused: false,
+            session: false,
+            break: true,
         };
         this.increment = this.increment.bind(this);
         this.decrement = this.decrement.bind(this);
         this.timer = this.timer.bind(this);
         this.reset = this.reset.bind(this);
+        this.paused = this.paused.bind(this);
+        this.myRef = React.createRef();
     }
 
     componentDidMount(){
@@ -33,18 +38,36 @@ class Pomodoro  extends React.Component {
         
     }
 
+    paused(){
+        this.setState({
+            paused: !this.state.paused,
+        });
+    }
+
     timer(){
 
         if(this.state.minutes!==0 && this.state.seconds!==0){
+            
             clearTimer = setInterval(() => {
 
-                this.setState({
-                    time: ""+(this.state.time-this.state.base),
-                    minutes: this.state.minutes > 0 ? Math.floor(((this.state.time-this.state.base)/(this.state.base))/60) : this.state.minutes,
-                    seconds: this.state.seconds > 0 ? this.state.seconds-1 : 59,
-                });
+                if(!this.state.paused){
+
+                    this.setState({
+                        time: ""+(this.state.time-this.state.base),
+                        minutes: this.state.minutes > 0 ? Math.floor(((this.state.time-this.state.base)/(this.state.base))/60) : this.state.minutes,
+                        seconds: this.state.seconds > 0 ? this.state.seconds-1 : 59,
+                        session: (this.state.minutes===0 && this.state.seconds===1) ? true : false,
+                        break: (this.state.minutes===0 && this.state.seconds===1) ? false : true,
+                    });
+                    console.log(typeof this.state.time);
+                    if(this.state.time==="0"){
+                        this.myRef.current.play();
+                    }
+                    
+                }
 
             }, this.state.base);
+
         }
     }
 
@@ -88,14 +111,14 @@ class Pomodoro  extends React.Component {
         console.log(e.target.id);
         let myId = e.target.id;
 
-        if(myId==="break-decrement"){
+        if(myId==="break-decrement" && this.state.breakLength > 1){
 
             this.setState({
-                breakLength: this.state.breakLength > 0 ? this.state.breakLength-1 : this.state.breakLength,
+                breakLength: this.state.breakLength > 1 ? this.state.breakLength-1 : this.state.breakLength,
             });
 
         }
-        else if(myId==="multiplier-decrement"){
+        else if(myId==="multiplier-decrement" && this.state.multiplier > 1 && this.state.time > 1 && this.state.minutes > 1){
 
             this.setState({
                 multiplier: this.state.multiplier > 1 ? this.state.multiplier-1 : this.state.multiplier,
@@ -116,6 +139,7 @@ class Pomodoro  extends React.Component {
 
         let minutes = (""+this.state.minutes).length===0 ? "0"+this.state.minutes : this.state.minutes;
         let seconds = this.state.seconds===60 ? "00" : ((""+this.state.seconds).length===1 ? "0"+this.state.seconds : this.state.seconds);
+        let lastSesMin = (minutes===0) ? {color: 'red',} : {};
 
         return(
             <div className="grid-container cent">
@@ -157,7 +181,7 @@ class Pomodoro  extends React.Component {
 
                 <div className="item4">
                     <h3>Session</h3>
-                    <div className="nums">
+                    <div className="nums" style={lastSesMin}>
                         <label id="minutes">{minutes}</label>:<label id="seconds">{seconds}</label>
                     </div>
                 </div>
@@ -165,11 +189,11 @@ class Pomodoro  extends React.Component {
                 <div className="item4">
                     <div>
                         <i className="fa fa-play-circle arrow controls" title="start" onClick={this.timer}></i> 
-                        <i className="fa fa-pause-circle arrow controls" title="pause"></i>
+                        <i className="fa fa-pause-circle arrow controls" title="pause" onClick={this.paused}></i>
                         <i className="fa fa-refresh fa arrow controls" title="reset" onClick={this.reset}></i>
                     </div>
                 </div>
-
+                <audio ref={this.myRef} id="beep" preload="auto" src="https://goo.gl/65cBl1"></audio>
             </div>
         );
 
