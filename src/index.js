@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import './style.scss';
+import Item from "./item.js";
+import Arrow from "./arrow.js";
+import Fa from "./fa.js";
 
 let clearTimer;
 
@@ -196,58 +199,37 @@ class Pomodoro  extends React.Component {
         const increment = this.state.disabled ? ()=>{} : this.increment;
         const timer = this.state.disabled ? ()=>{} : this.timer;
 
+        const item2Head = <h3>Break Length</h3>;
+        const fa1 = <Fa klasa={"fa fa-arrow-down fa-2x"} id={"break-decrement"} onClick={decrement}/>;
+        const fa2 = <Fa klasa={"fa fa-arrow-up fa-2x"} id={"break-increment"} onClick={increment}/>;
+        const arr1 = [<Arrow klasa={"arrow"} key={0} arrow={item2Head}/>, <Arrow klasa={"arrow"} key={1} arrow={fa1}/>, <Arrow klasa={"nums"} key={2} arrow={this.state.breakLength}/> , <Arrow key={3} klasa={"arrow"} arrow={fa2}/>];
+        
+        const item3Head = <h3>Session Length</h3>;
+        const fa3 = <Fa klasa={"fa fa-arrow-down fa-2x"} id={"multiplier-decrement"} onClick={decrement}/>;
+        const fa4 = <Fa klasa={"fa fa-arrow-up fa-2x"} id={"multiplier-increment"} onClick={increment}/>;
+        const arr2 = [<Arrow klasa={"arrow"} key={0} arrow={item3Head}/>, <Arrow klasa={"arrow"} key={1} arrow={fa3}/>, <Arrow klasa={"nums"} key={2} arrow={this.state.multiplier}/> , <Arrow key={3} klasa={"arrow"} arrow={fa4}/>];
+        
+        const item4Head = <h3 key={0}>Session</h3>;
+        const nums2 = <div key={1} className="nums" style={lastSesMin}><label id="minutes">{minutes}</label>:<label id="seconds">{seconds}</label></div>;
+        const arr3 = [item4Head, nums2];
+
+        const fa5 = <Fa key={0} klasa={"fa fa-play-circle arrow controls"} title={"start"} onClick={timer}/>;
+        const fa6 = <Fa key={1} klasa={"fa fa-pause-circle arrow controls"} title={"pause"} onClick={this.paused}/>;
+        const fa7 = <Fa key={2} klasa={"fa fa-play-circle arrow controls"} title={"reset"} onClick={this.reset}/>;
+        const arr4 = [fa5, fa6, fa7];
+
         return(
             <div className="grid-container cent">
-                <h1 className="item1">Pomodoro Clock</h1>
+                
+                <Item klasa={"item1"} arrowsAndNums={"Pomodoro Clock"}/>
+                
+                <Item klasa={"item2"} arrowsAndNums={arr1}/>
 
-                <div className="item2">
-                    <h3>Break Length</h3>
+                <Item klasa={"item3"} arrowsAndNums={arr2}/>
 
-                    <div className="arrow">
-                        <i className="fa fa-arrow-down fa-2x" id="break-decrement" onClick={decrement}></i>
-                    </div>
+                <Item klasa={"item4"} arrowsAndNums={arr3}/>
 
-                    <div className="nums">
-                        {this.state.breakLength}
-                    </div>
-
-                    <div className="arrow">
-                        <i className="fa fa-arrow-up fa-2x" id="break-increment" onClick={increment}></i>
-                    </div> 
-
-                </div>
-
-                <div className="item3">
-                    <h3>Session Length</h3>
-
-                    <div className="arrow">
-                        <i className="fa fa-arrow-down fa-2x" id="multiplier-decrement" onClick={decrement}></i>
-                    </div>
-
-                    <div className="nums">
-                        {this.state.multiplier}
-                    </div>
-
-                    <div className="arrow">
-                        <i className="fa fa-arrow-up fa-2x" id="multiplier-increment" onClick={increment}></i>
-                    </div> 
-
-                </div>
-
-                <div className="item4">
-                    <h3>Session</h3>
-                    <div className="nums" style={lastSesMin}>
-                        <label id="minutes">{minutes}</label>:<label id="seconds">{seconds}</label>
-                    </div>
-                </div>
-
-                <div className="item4">
-                    <div>
-                        <i className="fa fa-play-circle arrow controls" title="start" onClick={timer}></i> 
-                        <i className="fa fa-pause-circle arrow controls" title="pause" onClick={this.paused}></i>
-                        <i className="fa fa-refresh fa arrow controls" title="reset" onClick={this.reset}></i>
-                    </div>
-                </div>
+                <Item klasa={"item4"} arrowsAndNums={arr4}/>
                 
             </div>
         );
