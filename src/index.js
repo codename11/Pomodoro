@@ -42,10 +42,6 @@ class Pomodoro  extends React.Component {
     }
 
     paused(){
-
-        /*this.setState(prevState => ({
-            paused: !prevState.paused
-        }));*/
         
         this.setState({
             paused: !this.state.paused
@@ -59,10 +55,10 @@ class Pomodoro  extends React.Component {
 
         if(this.state.paused === false){
 
-            if(this.state.minutes!==0 && this.state.seconds!==0){
+            if((this.state.minutes!==0 && this.state.seconds!==0) || (this.state.seconds!==0)){
 
                 this.clearTimer = setInterval(() => {
-
+                    
                     if(this.state.session===false){
                         console.log("Sada ide session.");
                         
@@ -73,10 +69,6 @@ class Pomodoro  extends React.Component {
                             session: (this.state.minutes===0 && this.state.seconds===1) ? true : false,
                             break: (this.state.minutes===0 && this.state.seconds===1) ? false : true,
                         });
-
-                        if(this.state.minutes===0 && this.state.seconds===0){
-                            this.myRef.current.play();
-                        }
 
                     }
                     
@@ -99,10 +91,6 @@ class Pomodoro  extends React.Component {
                             session: (this.state.minutes===0 && this.state.seconds===1) ? false : true,
                             break: (this.state.minutes===0 && this.state.seconds===1) ? true : false,
                         });
-
-                        if(this.state.minutes===0 && this.state.seconds===0){
-                            this.myRef.current.play();
-                        }
 
                     }
 
@@ -130,14 +118,16 @@ class Pomodoro  extends React.Component {
     }
 
     reset(){
+        
         this.myRef.current.pause();
         this.myRef.current.currentTime = 0;
         clearInterval(this.clearTimer);
+        this.clearTimer = null;
         this.setState({
             breakLength: 5,
             multiplier: 25,
             base: 1000,
-            time: ""+(this.state.multiplier*this.state.base*60),
+            time: ""+(25*1000*60),
             minutes: 25,
             seconds: 60,
             paused: false,
@@ -197,15 +187,34 @@ class Pomodoro  extends React.Component {
     }
 
     render(){
-        console.log(this.state);
-        console.log(this.state.paused);
+        //console.log(this.state);
 
-        let minutes = (""+this.state.minutes).length===1 ? "0"+this.state.minutes : this.state.minutes;
-        let seconds = this.state.seconds===60 ? "00" : ((""+this.state.seconds).length===1 ? "0"+this.state.seconds : this.state.seconds);
-        let lastSesMin = (minutes==="00") ? {color: 'red',} : {};
+        const minutes = (""+this.state.minutes).length===1 ? "0"+this.state.minutes : this.state.minutes;
+        const seconds = this.state.seconds===60 ? "00" : ((""+this.state.seconds).length===1 ? "0"+this.state.seconds : this.state.seconds);
+        const time = minutes+":"+seconds;
+        
+        if((time==="00:00" && (this.state.session===false &&  this.state.break===true))){
+            console.log("1: "+time);
+            console.log("2: "+this.state.minutes+":"+this.state.seconds);
+            this.myRef.current.play();
+            console.log("Sesija");
+        }
 
-        const decrement = this.state.disabled ? ()=>{} : this.decrement;
-        const increment = this.state.disabled ? ()=>{} : this.increment;
+        if((time==="00:00" && (this.state.session===true &&  this.state.break===false))){
+            console.log("1: "+time);
+            console.log("2: "+this.state.minutes+":"+this.state.seconds);
+            this.myRef.current.play();
+            console.log("Brejk");
+        }
+
+        /*if((this.state.minutes+":"+this.state.seconds)===time){
+            alert("alert2: "+this.state.minutes+":"+this.state.seconds);
+        }*/
+
+        const lastSesMin = (minutes==="00") ? {color: 'red',} : {};
+
+        const decrement = this.clearTimer ? ()=>{} : this.decrement;
+        const increment = this.clearTimer ? ()=>{} : this.increment;
 
         const item2Head = <h3 id="break-label">Break Length</h3>;
         const fa1 = <Fa klasa={"fa fa-arrow-down fa-2x"} id={"break-decrement"} onClick={decrement}/>;
@@ -218,8 +227,8 @@ class Pomodoro  extends React.Component {
         const arr2 = [<Arrow klasa={"arrow"} key={0} arrow={item3Head}/>, <br key={1}/>, <Arrow klasa={"arrow"} key={2} arrow={fa3}/>, <Arrow klasa={"nums"} id={"session-length"} key={3} arrow={this.state.multiplier}/> , <Arrow key={4} klasa={"arrow"} arrow={fa4}/>];
         
         const countdownLabel = (this.state.session===false &&  this.state.break===true) ? "Session" : "Break";
-        const item4Head = <h3 key={0} id={"timer-label"}>{countdownLabel}</h3>;
-        const nums2 = <div key={1} className="nums" style={lastSesMin} id={"time-left"}><label id="minutes">{minutes}</label>:<label id="seconds">{seconds}</label></div>;
+        const item4Head = <h3 key={0} id={"timer-label"} style={lastSesMin}>{countdownLabel}</h3>;
+        const nums2 = <div key={1} className="nums" style={lastSesMin} id={"time-left"}>{time}</div>;
         const arr3 = [item4Head, nums2];
 
         const fa5 = <Fa key={0} klasa={"fa fa-play arrow controls"} title={"start-pause"}/>;
