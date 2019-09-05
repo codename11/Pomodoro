@@ -87,6 +87,14 @@ body{
     font-size: $f1;
 }
 
+.fa.fa-pause.arrow.controls{
+    margin-left: -10px;
+}
+
 .fa.fa-arrow-down.fa-2x:hover, .fa.fa-arrow-up.fa-2x:hover{
     color: silver;
+}
+
+#break-label{
+    display: inline-block;
 }
