@@ -5,7 +5,7 @@ import './style.scss';
 import Item from "./item.js";
 import Arrow from "./arrow.js";
 import Fa from "./fa.js";
-
+let obj = {};
 class Pomodoro  extends React.Component {
 
     constructor(props) {
@@ -17,7 +17,7 @@ class Pomodoro  extends React.Component {
             time: 0,
             minutes: 25,
             seconds: 60,
-            paused: false,
+            paused: true,
             session: false,
             break: true,
             disabled: false,
@@ -29,10 +29,16 @@ class Pomodoro  extends React.Component {
         this.paused = this.paused.bind(this);
         this.myRef = React.createRef();
         this.clearTimer = null;
+
     }
 
     componentDidMount(){
-        
+
+        this.myRef.current.pause();
+        this.myRef.current.currentTime = 0;
+        clearInterval(this.clearTimer);
+        this.clearTimer = null;
+
         this.setState({
             time: ""+(this.state.multiplier*this.state.base*60),
             minutes: this.state.multiplier,
@@ -41,88 +47,98 @@ class Pomodoro  extends React.Component {
         
     }
 
-    paused(){
-        
-        this.setState({
-            paused: !this.state.paused
-        });
-        
-    }
+    paused(callback){
 
-    timer(){
-        
-        this.paused();
-
-        if(this.state.paused === false){
-
-            if((this.state.minutes!==0 && this.state.seconds!==0) || (this.state.seconds!==0)){
-
-                this.clearTimer = setInterval(() => {
-                    
-                    if(this.state.session===false){
-                        console.log("Sada ide session.");
-                        
-                        this.setState({
-                            time: ""+(this.state.time-this.state.base),
-                            minutes: this.state.minutes > 0 ? Math.floor(((this.state.time-this.state.base)/(this.state.base))/60) : this.state.minutes,
-                            seconds: this.state.seconds > 0 ? this.state.seconds-1 : 59,
-                            session: (this.state.minutes===0 && this.state.seconds===1) ? true : false,
-                            break: (this.state.minutes===0 && this.state.seconds===1) ? false : true,
-                        });
-
-                    }
-                    
-                    if(this.state.break===false && this.state.session===true && this.state.time==="0"){
-                        console.log("Kraj session-a. Sada ide resetovanje, pa break.");
-                        this.setState({
-                            time: ""+(this.state.breakLength*this.state.base*60),
-                            minutes: this.state.breakLength,
-                            seconds: 60,
-                        });
-
-                    }
-
-                    if(this.state.break===false){
-                        console.log("Sada ide break.");
-                        this.setState({
-                            time: ""+(this.state.time-this.state.base),
-                            minutes: this.state.minutes > 0 ? Math.floor(((this.state.time-this.state.base)/(this.state.base))/60) : this.state.minutes,
-                            seconds: this.state.seconds > 0 ? this.state.seconds-1 : 59,
-                            session: (this.state.minutes===0 && this.state.seconds===1) ? false : true,
-                            break: (this.state.minutes===0 && this.state.seconds===1) ? true : false,
-                        });
-
-                    }
-
-                    if(this.state.break===true && this.state.session===false && this.state.time==="0"){
-                        console.log("Kraj break-a. Sada ide resetovanje, pa session.");
-                        this.setState({
-                            time: ""+(this.state.multiplier*this.state.base*60),
-                            minutes: this.state.multiplier,
-                            seconds: this.state.seconds === 60 ? "00" : this.state.seconds,
-                        });
-
-                    }
-
-                }, this.state.base);
-
-            }
-
-        }
-        else{
-            
-            clearInterval(this.clearTimer);
-
-        }
-
-    }
-
-    reset(){
-        
         this.myRef.current.pause();
         this.myRef.current.currentTime = 0;
         clearInterval(this.clearTimer);
         this.clearTimer = null;
+
+        this.setState(prevState => ({
+            paused: !prevState.paused
+        }), callback);
+        
+    }
+
+    timer(){
+
+        this.paused(()=>{
+
+            if(this.state.paused === false){
+            
+                if((this.state.minutes!==0 && this.state.seconds!==0) || (this.state.seconds!==0)){
+    
+                    this.clearTimer = setInterval(() => {
+                        
+                        if(this.state.session===false){
+                            
+                            this.setState({
+                                time: ""+(this.state.time-this.state.base),
+                                minutes: this.state.minutes > 0 ? Math.floor(((this.state.time-this.state.base)/(this.state.base))/60) : this.state.minutes,
+                                seconds: this.state.seconds > 0 ? this.state.seconds-1 : 59,
+                                session: (this.state.minutes===0 && this.state.seconds===1) ? true : false,
+                                break: (this.state.minutes===0 && this.state.seconds===1) ? false : true,
+                            });
+    
+                        }
+                        
+                        if(this.state.break===false && this.state.session===true && this.state.time==="0"){
+                            
+                            this.setState({
+                                time: ""+(this.state.breakLength*this.state.base*60),
+                                minutes: this.state.breakLength,
+                                seconds: 60,
+                            });
+    
+                        }
+    
+                        if(this.state.break===false){
+
+                            this.setState({
+                                time: ""+(this.state.time-this.state.base),
+                                minutes: this.state.minutes > 0 ? Math.floor(((this.state.time-this.state.base)/(this.state.base))/60) : this.state.minutes,
+                                seconds: this.state.seconds > 0 ? this.state.seconds-1 : 59,
+                                session: (this.state.minutes===0 && this.state.seconds===1) ? false : true,
+                                break: (this.state.minutes===0 && this.state.seconds===1) ? true : false,
+                            });
+    
+                        }
+    
+                        if(this.state.break===true && this.state.session===false && this.state.time==="0"){
+
+                            this.setState({
+                                time: ""+(this.state.multiplier*this.state.base*60),
+                                minutes: this.state.multiplier,
+                                seconds: this.state.seconds === 60 ? "00" : this.state.seconds,
+                            });
+    
+                        }
+    
+                    }, this.state.base);
+    
+                }
+    
+            }
+            else{
+                
+                this.myRef.current.pause();
+                this.myRef.current.currentTime = 0;
+                clearInterval(this.clearTimer);
+                this.clearTimer = null;
+    
+            }
+
+        });
+
+    }
+
+    reset(){
+
+        this.myRef.current.pause();
+        this.myRef.current.currentTime = 0;
+        clearInterval(this.clearTimer);
+        this.clearTimer = null;
+
         this.setState({
             breakLength: 5,
             multiplier: 25,
@@ -130,7 +146,7 @@ class Pomodoro  extends React.Component {
             time: ""+(25*1000*60),
             minutes: 25,
             seconds: 60,
-            paused: false,
+            paused: true,
             session: false,
             break: true,
             disabled: false,
@@ -139,8 +155,7 @@ class Pomodoro  extends React.Component {
     }
 
     increment(e){
-        
-        console.log(e.target.id);
+
         let myId = e.target.id;
 
         if(myId==="break-increment"){
@@ -163,8 +178,7 @@ class Pomodoro  extends React.Component {
     }
 
     decrement(e){
-        
-        console.log(e.target.id);
+
         let myId = e.target.id;
 
         if(myId==="break-decrement" && this.state.breakLength > 1){
@@ -191,27 +205,35 @@ class Pomodoro  extends React.Component {
 
         const minutes = (""+this.state.minutes).length===1 ? "0"+this.state.minutes : this.state.minutes;
         const seconds = this.state.seconds===60 ? "00" : ((""+this.state.seconds).length===1 ? "0"+this.state.seconds : this.state.seconds);
-        const time = minutes+":"+seconds;
-        
+        let time = minutes+":"+seconds;
+
+        if(time==="0:00" || time==="00:0" || time==="0:0"){
+            time = "00:00";
+        }
+
         if((time==="00:00" && (this.state.session===false &&  this.state.break===true))){
-            console.log("1: "+time);
-            console.log("2: "+this.state.minutes+":"+this.state.seconds);
+
             this.myRef.current.play();
-            console.log("Sesija");
+            
         }
 
         if((time==="00:00" && (this.state.session===true &&  this.state.break===false))){
-            console.log("1: "+time);
-            console.log("2: "+this.state.minutes+":"+this.state.seconds);
+    
             this.myRef.current.play();
-            console.log("Brejk");
+            
         }
 
-        /*if((this.state.minutes+":"+this.state.seconds)===time){
-            alert("alert2: "+this.state.minutes+":"+this.state.seconds);
-        }*/
+        
+        obj.stateTime = this.state.minutes+":"+this.state.seconds;
+        obj.ordTime = time;
+        console.log(obj);
+        
+        /*console.log("****");
+        console.log(this.state.minutes+":"+this.state.seconds);
+        console.log(time);
+        console.log("****");*/
 
-        const lastSesMin = (minutes==="00") ? {color: 'red',} : {};
+        const lastSesMin = (minutes==="00") ? {color: 'red',} : {color: 'blue',};
 
         const decrement = this.clearTimer ? ()=>{} : this.decrement;
         const increment = this.clearTimer ? ()=>{} : this.increment;
@@ -227,6 +249,7 @@ class Pomodoro  extends React.Component {
         const arr2 = [<Arrow klasa={"arrow"} key={0} arrow={item3Head}/>, <br key={1}/>, <Arrow klasa={"arrow"} key={2} arrow={fa3}/>, <Arrow klasa={"nums"} id={"session-length"} key={3} arrow={this.state.multiplier}/> , <Arrow key={4} klasa={"arrow"} arrow={fa4}/>];
         
         const countdownLabel = (this.state.session===false &&  this.state.break===true) ? "Session" : "Break";
+
         const item4Head = <h3 key={0} id={"timer-label"} style={lastSesMin}>{countdownLabel}</h3>;
         const nums2 = <div key={1} className="nums" style={lastSesMin} id={"time-left"}>{time}</div>;
         const arr3 = [item4Head, nums2];
@@ -249,7 +272,7 @@ class Pomodoro  extends React.Component {
                 <Item klasa={"item4"} arrowsAndNums={arr3}/>
 
                 <Item klasa={"item4"} arrowsAndNums={arr4}/>
-                <audio ref={this.myRef} id="beep" src="http://soundbible.com/grab.php?id=2158&type=wav"></audio>
+                <audio preload="auto" ref={this.myRef} id="beep" src="http://soundbible.com/grab.php?id=2158&type=wav"></audio>
             </div>
         );
 
