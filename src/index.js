@@ -310,7 +310,7 @@ class Pomodoro  extends React.Component {
 
         const fa5 = <Fa key={0} klasa={"fa fa-play arrow controls"} title={"start-pause"}/>;
         const fa6 = <Fa key={1} klasa={"fa fa-pause arrow controls"} title={"start-pause"}/>;
-        const fa7 = <Fa key={2} klasa={"fa fa-refresh arrow controls"} id="reset" title={"reset"} onClick={this.reset}/>;
+        const fa7 = <Fa key={2} klasa={"fa fa-refresh arrow controls"} title={"reset"} id="reset" onClick={this.reset}/>;
         const startPause = <div id="start_stop" key={4} onClick={this.timer}>{fa5}{fa6}</div>;
         const arr4 = [startPause, fa7];
         //End: JSX elements with their props.
@@ -318,7 +318,7 @@ class Pomodoro  extends React.Component {
         return(
             <div className="grid-container cent">
                 
-                <Item klasa={"item1"} arrowsAndNums={"Pomodoro Clock"}/>
+                <Item klasa={"item1 animated bounceInDown"} arrowsAndNums={"Pomodoro Clock"}/>
                 
                 <Item klasa={"item2"} arrowsAndNums={arr1}/>
 

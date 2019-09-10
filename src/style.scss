@@ -34,8 +34,8 @@ body{
     left: 50% !important;
     top: 50% !important;
     -webkit-transform: $half !important;
-    -webkit-transform: $half;
-    transform: $half;
+    -webkit-transform: $half !important;
+    transform: $half !important;
 }
 
 .grid-container {
@@ -45,9 +45,16 @@ body{
     grid-gap: 10px;
     background-color: $wsmoke;
     border-radius: 10px;
+    border: 1px solid silver;
     padding: 20px;
     text-align: center !important;
     grid-gap:  20px;
+    -webkit-transition: box-shadow 0.5s;
+    transition: box-shadow 0.5s;
+}
+
+.grid-container:hover{
+    box-shadow: 15px 15px 18px #888888;  
 }
 
 .item1{
@@ -68,7 +75,16 @@ body{
 
 .arrow{
     display: inline-block;
+    -webkit-transition: background-color, border-radius 0.5s;
+    transition: background-color, border-radius 0.5s;
+}
+
+.fa-arrow-down, .fa-arrow-up, [title=start-pause], [title=reset]{
     cursor: $cursor;
+}
+
+#start_stop:hover, #reset:hover{
+    color: red;
 }
 
 .item3{
@@ -91,8 +107,17 @@ body{
     margin-left: -10px;
 }
 
-.fa.fa-arrow-down.fa-2x:hover, .fa.fa-arrow-up.fa-2x:hover{
-    color: silver;
+#start_stop:hover, #reset:hover{
+    -webkit-text-stroke: 2px navy; 
+    text-stroke: 2px navy;
+}
+
+.fa.fa-arrow-down.fa-2x:hover{
+    color: #dc3545;
+}
+
+.fa.fa-arrow-up.fa-2x:hover{
+    color: #28a745;
 }
 
 #break-label{
