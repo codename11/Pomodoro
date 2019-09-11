@@ -45,7 +45,6 @@ body{
     grid-gap: 10px;
     background-color: $wsmoke;
     border-radius: 10px;
-    border: 1px solid silver;
     padding: 20px;
     text-align: center !important;
     grid-gap:  20px;
@@ -54,6 +53,8 @@ body{
 }
 
 .grid-container:hover{
+    border-top: 1px solid silver;
+    border-left: 1px solid silver;
     box-shadow: 15px 15px 18px #888888;  
 }
 
